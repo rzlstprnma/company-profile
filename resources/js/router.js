@@ -18,7 +18,7 @@ const routes = [
         component: Register
     },
     {
-        path: "/home",
+        path: "/admin/home",
         name: "Home",
         component: Home
     }

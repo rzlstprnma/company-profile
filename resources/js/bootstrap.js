@@ -21,7 +21,14 @@ try {
 
 window.axios = require('axios');
 
+let token = localStorage.getItem('token')
+
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Authorization'] = 'Bearer ' +token;
+window.axios.defaults.headers.common['X-CSRF-TOKEN'] = $("meta[name=csrf-token]").val();
+
+window.axios.defaults.withCredentials = true
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
