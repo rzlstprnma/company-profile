@@ -42,10 +42,6 @@ export default {
     data() {
         return {
             categories: [],            
-            //state loggedIn with localStorage
-            loggedIn: localStorage.getItem('loggedIn'),
-            //state token
-            token: localStorage.getItem('token'),
         }
     },
     methods: {
@@ -67,7 +63,7 @@ export default {
         },
         deleteCategory(id){
             axios
-                .post('/api/admin/category/delete/'+id, {
+                .post('/api/admin/categories/'+id, {
                     _method : 'DELETE'
                 })
                 .then(res => {              

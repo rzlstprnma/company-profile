@@ -52,13 +52,6 @@ export default {
                 return this.$router.push({ name: 'Login' })
             })
         }
-    },
-
-    //check user logged in or not
-    mounted() {
-        if(!this.loggedIn) {
-            return this.$router.push({ name: 'Login' })
-        }
     }
 }
 </script>

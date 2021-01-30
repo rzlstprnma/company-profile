@@ -11,4 +11,9 @@ class BlogCategory extends Model
     protected $fillable = [
         'category_name'
     ];
+
+    public function Post()
+    {
+        return $this->belongsTo('App\Models\Post');
+    }
 }

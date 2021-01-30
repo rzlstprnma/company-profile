@@ -11,4 +11,14 @@ class BlogPost extends Model
     protected $fillable = [
         'user_id', 'category_id', 'photo', 'title', 'body'
     ];
+
+    public function category()
+    {
+        return $this->hasOne('App\Models\BlogCategory', 'id', 'category_id')->select(["id", "category_name"]);
+    }
+    
+    public function tags()
+    {
+        return $this->belongsToMany('App\Models\BlogTag', 'blog_post_tags', 'blog_post_id', 'blog_tag_id')->select(["blog_tags.id", "tag_name"]);
+    }
 }

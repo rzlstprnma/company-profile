@@ -28,5 +28,8 @@ export default {
 </script>
 
 <style>
-
+  a{
+    text-decoration: none !important;
+    color: #000;
+  }
 </style>

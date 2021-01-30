@@ -17,7 +17,7 @@ class CategoryController extends Controller
         return response()->json($blog_categories);
     }
 
-    public function delete($id){
+    public function destroy($id){
         $blog_category = BlogCategory::destroy($id);
         return response()->json($blog_category);
     }
