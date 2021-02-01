@@ -17,8 +17,8 @@ class BlogPost extends Model
         return $this->hasOne('App\Models\BlogCategory', 'id', 'category_id')->select(["id", "category_name"]);
     }
     
-    public function tags()
+    public function blog_tags()
     {
-        return $this->belongsToMany('App\Models\BlogTag', 'blog_post_tags', 'blog_post_id', 'blog_tag_id')->select(["blog_tags.id", "tag_name"]);
+        return $this->belongsToMany('App\Models\BlogTag', 'blog_post_tags', 'blog_post_id', 'blog_tag_id');
     }
 }

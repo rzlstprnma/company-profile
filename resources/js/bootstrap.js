@@ -30,6 +30,13 @@ window.axios.defaults.headers.common['X-CSRF-TOKEN'] = $("meta[name=csrf-token]"
 window.axios.defaults.withCredentials = true
 
 
+// window.$.ajaxSetup({
+//     headers: {
+//         'Authorization' : 'Bearer ' +token,
+//         'X-CSRF-TOKEN' : $("meta[name=csrf-token]").val()
+//     }
+// });
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -15,18 +16,7 @@ class PostController extends Controller
     public function index()
     {
         $blog_posts = BlogPost::with(["category"])->get();
-        // dd($blog_posts);
         return response()->json($blog_posts);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -37,29 +27,32 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'title' => 'required',
+            'category_id' => 'required',
+            'body' => 'required',
+            'photo' => 'image|mimes:jpeg,png,jpg,svg',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $post = new BlogPost();
+        $post->user_id = Auth::user()->id;
+        $post->title = $request->title;
+        $post->category_id = $request->category_id;
+        $post->body = $request->body;
+        
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+
+        if($request->has('photo')){
+            $imageName = time().'_post_'.$request->file('photo')->extension();  
+            $request->file('photo')->storeAs('post_images', $imageName);
+            $post->photo = $imageName;
+            $post->save();
+        }
+
+        $blog_tag_id = explode(",", $request->blog_tag_id);
+        $post->blog_tags()->sync($blog_tag_id);
+        
+        return response()->json($post);
     }
 
     /**

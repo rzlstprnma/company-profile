@@ -22,7 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', [LoginController::class, 'index'])->name('login');
+
+Route::post('/login', [LoginController::class, 'index']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'admin'], function () {
@@ -32,5 +33,7 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'admin'], function (
     Route::resource('tags', TagController::class, [
         'only' => ['index', 'store', 'destroy']
     ]);
-    Route::resource('posts', PostController::class);
+    Route::resource('posts', PostController::class, [
+        'only' => ['index', 'store', 'destroy']
+    ]);
 });

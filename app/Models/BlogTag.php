@@ -11,4 +11,9 @@ class BlogTag extends Model
     protected $fillable = [
         'tag_name'
     ];
+
+    public function posts()
+    {
+        return $this->belongsToMany('App\Models\BlogPost', 'blog_post_tags', 'blog_tag_id', 'blog_post_id');
+    }
 }
