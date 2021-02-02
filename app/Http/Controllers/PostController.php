@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -43,7 +44,7 @@ class PostController extends Controller
 
 
         if($request->has('photo')){
-            $imageName = time().'_post_'.$request->file('photo')->extension();  
+            $imageName = time().'_post.'.$request->file('photo')->extension();  
             $request->file('photo')->storeAs('post_images', $imageName);
             $post->photo = $imageName;
             $post->save();
@@ -75,6 +76,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $blog_post = BlogPost::find($id);
+        Storage::delete("post_images/".$blog_post->photo);
+        $blog_post->delete();
+        return response()->json($blog_post);
     }
 }

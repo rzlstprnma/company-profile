@@ -2743,6 +2743,15 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/admin/posts').then(function (res) {
         _this.posts = res.data;
       });
+    },
+    deletePost: function deletePost(id) {
+      var _this2 = this;
+
+      axios["delete"]("/api/admin/posts/".concat(id)).then(function (res) {
+        _this2.posts = _this2.posts.filter(function (post) {
+          return post.id != id;
+        });
+      });
     }
   },
   mounted: function mounted() {
@@ -2871,6 +2880,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_admin_Tags_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/admin/Tags.vue */ "./resources/js/components/admin/Tags.vue");
 /* harmony import */ var _components_admin_Navbar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/admin/Navbar.vue */ "./resources/js/components/admin/Navbar.vue");
 /* harmony import */ var _components_admin_Posts_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/admin/Posts.vue */ "./resources/js/components/admin/Posts.vue");
+//
+//
 //
 //
 //
@@ -47195,10 +47206,15 @@ var render = function() {
                 ),
                 _vm._v(" "),
                 _c(
-                  "router-link",
+                  "a",
                   {
                     staticClass: "ml-2 btn btn-sm btn-danger text-dark",
-                    attrs: { to: "" }
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deletePost(post.id)
+                      }
+                    }
                   },
                   [_c("div", { staticClass: "fa fa-trash" })]
                 )
@@ -47397,16 +47413,23 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container mt-5" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-lg-8" }, [_c("Posts")], 1),
+          _c("div", { staticClass: "col-lg-4" }, [
+            _c(
+              "div",
+              { staticClass: "mt-lg-5 mb-4" },
+              [
+                _c("Categories"),
+                _vm._v(" "),
+                _c("Tags", { staticClass: "mt-3" })
+              ],
+              1
+            )
+          ]),
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "col-lg-4" },
-            [
-              _c("Categories"),
-              _vm._v(" "),
-              _c("Tags", { staticClass: "mt-3" })
-            ],
+            { staticClass: "col-lg-8" },
+            [_c("Posts", { staticClass: "mt-1" })],
             1
           )
         ])

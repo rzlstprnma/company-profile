@@ -14,7 +14,7 @@
                 <div class="float-left post-action">
                     <router-link class="btn btn-sm btn-info text-dark" to=""><i class="fa fa-eye"></i></router-link>
                     <router-link class="ml-2 btn btn-sm btn-warning text-dark" to=""><i class="fa fa-pencil"></i></router-link>
-                    <router-link class="ml-2 btn btn-sm btn-danger text-dark" to=""><div class="fa fa-trash"></div></router-link>
+                    <a class="ml-2 btn btn-sm btn-danger text-dark" @click.prevent="deletePost(post.id)"><div class="fa fa-trash"></div></a>
                 </div>
                 <div class="float-right post-category"><span class="badge badge-success">{{ post.category.category_name }}</span></div>
             </div>
@@ -35,6 +35,13 @@ export default {
                 .get('/api/admin/posts')
                 .then(res => {
                     this.posts = res.data
+                })
+        },
+        deletePost(id){
+            axios
+                .delete(`/api/admin/posts/${id}`)
+                .then(res => {
+                    this.posts = this.posts.filter(post => post.id != id)
                 })
         }
     },

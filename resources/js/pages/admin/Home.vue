@@ -3,12 +3,14 @@
         <Navbar/>
         <div class="container mt-5">
             <div class="row">
-                <div class="col-lg-8">
-                    <Posts/>
-                </div>
                 <div class="col-lg-4">
-                    <Categories/>
-                    <Tags class="mt-3"/>
+                    <div class="mt-lg-5 mb-4">
+                        <Categories/>
+                        <Tags class="mt-3"/>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <Posts class="mt-1"/>
                 </div>
             </div>
         </div>
@@ -46,5 +48,4 @@ export default {
 </script>
 
 <style>
-
 </style>
