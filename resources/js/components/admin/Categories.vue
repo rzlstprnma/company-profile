@@ -11,7 +11,7 @@
                     <form @submit.prevent="createCategory" method="post">
                         <div class="form-group">
                             <label for="category_name">Category Name</label>
-                            <input type="text" v-model="categories.category_name" class="form-control-sm form-control">
+                            <input type="text" v-model="category_name" class="form-control-sm form-control">
                         </div>
                         <button class="btn btn-sm btn-block btn-primary">Create Category</button>
                     </form>
@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="category in categories" :key="category.id">
+                            <tr v-for="category in allCategories" :key="category.id">
                                 <td>{{ category.category_name }}</td>
                                 <td>
                                     <a href="#" @click.prevent="deleteCategory(category.id)" class="btn btn-sm btn-danger">Delete</a>
@@ -38,41 +38,23 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     data() {
         return {
-            categories: [],            
+            category_name: "",            
         }
     },
+    computed: mapGetters(['allCategories']),
     methods: {
-        getCategories(){
-            axios
-                .get('/api/admin/categories')
-                .then(res => {
-                    this.categories = res.data
-                })
-        },
+        ...mapActions(['fetchCategories', 'addCategory', 'deleteCategory']),
         createCategory(){
-            axios
-                .post('/api/admin/categories', {
-                    category_name: this.categories.category_name
-                })
-                .then(res => {
-                    this.categories = [...this.categories, res.data]
-                })
-        },
-        deleteCategory(id){
-            axios
-                .post('/api/admin/categories/'+id, {
-                    _method : 'DELETE'
-                })
-                .then(res => {              
-                    this.categories = this.categories.filter(category => category.id != id)
-                })
+            this.addCategory(this.category_name)
         }
     },
-    mounted() {
-        this.getCategories()
+    created() {
+        this.fetchCategories()
     }
 }
 </script>

@@ -2392,17 +2392,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
 /* harmony export */ });
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
 //
@@ -2443,43 +2438,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      categories: []
+      category_name: ""
     };
   },
-  methods: {
-    getCategories: function getCategories() {
-      var _this = this;
-
-      axios.get('/api/admin/categories').then(function (res) {
-        _this.categories = res.data;
-      });
-    },
+  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['allCategories']),
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['fetchCategories', 'addCategory', 'deleteCategory'])), {}, {
     createCategory: function createCategory() {
-      var _this2 = this;
-
-      axios.post('/api/admin/categories', {
-        category_name: this.categories.category_name
-      }).then(function (res) {
-        _this2.categories = [].concat(_toConsumableArray(_this2.categories), [res.data]);
-      });
-    },
-    deleteCategory: function deleteCategory(id) {
-      var _this3 = this;
-
-      axios.post('/api/admin/categories/' + id, {
-        _method: 'DELETE'
-      }).then(function (res) {
-        _this3.categories = _this3.categories.filter(function (category) {
-          return category.id != id;
-        });
-      });
+      this.addCategory(this.category_name);
     }
-  },
-  mounted: function mounted() {
-    this.getCategories();
+  }),
+  created: function created() {
+    this.fetchCategories();
   }
 });
 
@@ -3337,7 +3310,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_tags__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/tags */ "./resources/js/store/modules/tags.js");
 /* harmony import */ var _modules_categories__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/categories */ "./resources/js/store/modules/categories.js");
-/* harmony import */ var _modules_categories__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_modules_categories__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _modules_posts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/posts */ "./resources/js/store/modules/posts.js");
 /* harmony import */ var _modules_posts__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_modules_posts__WEBPACK_IMPORTED_MODULE_2__);
 
@@ -3349,7 +3321,7 @@ vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vuex__WEBPACK_IMPORTED_MODULE_4__.d
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_4__.default.Store({
   modules: {
     tags: _modules_tags__WEBPACK_IMPORTED_MODULE_0__.default,
-    categories: (_modules_categories__WEBPACK_IMPORTED_MODULE_1___default()),
+    categories: _modules_categories__WEBPACK_IMPORTED_MODULE_1__.default,
     posts: (_modules_posts__WEBPACK_IMPORTED_MODULE_2___default())
   }
 }));
@@ -3360,9 +3332,134 @@ vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vuex__WEBPACK_IMPORTED_MODULE_4__.d
 /*!**************************************************!*\
   !*** ./resources/js/store/modules/categories.js ***!
   \**************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => __WEBPACK_DEFAULT_EXPORT__
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var state = {
+  categories: []
+};
+var getters = {
+  allCategories: function allCategories(state) {
+    return state.categories;
+  }
+};
+var actions = {
+  fetchCategories: function fetchCategories(_ref) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              commit = _ref.commit;
+              _context.next = 3;
+              return axios.get('/api/admin/categories');
+
+            case 3:
+              response = _context.sent;
+              commit('setCategories', response.data);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
+  addCategory: function addCategory(_ref2, category_name) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+      var commit, response;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              commit = _ref2.commit;
+              _context2.next = 3;
+              return axios.post('/api/admin/categories', {
+                category_name: category_name
+              });
+
+            case 3:
+              response = _context2.sent;
+              commit('newCategory', response.data);
+
+            case 5:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  },
+  deleteCategory: function deleteCategory(_ref3, id) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+      var commit;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              commit = _ref3.commit;
+              _context3.next = 3;
+              return axios.post("/api/admin/categories/".concat(id), {
+                _method: 'DELETE'
+              });
+
+            case 3:
+              commit('removeCategory', id);
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }))();
+  }
+};
+var mutations = {
+  setCategories: function setCategories(state, categories) {
+    return state.categories = categories;
+  },
+  newCategory: function newCategory(state, categories) {
+    return state.categories = [].concat(_toConsumableArray(state.categories), [categories]);
+  },
+  removeCategory: function removeCategory(state, id) {
+    return state.categories = state.categories.filter(function (category) {
+      return category.id != id;
+    });
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -47603,23 +47700,19 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.categories.category_name,
-                        expression: "categories.category_name"
+                        value: _vm.category_name,
+                        expression: "category_name"
                       }
                     ],
                     staticClass: "form-control-sm form-control",
                     attrs: { type: "text" },
-                    domProps: { value: _vm.categories.category_name },
+                    domProps: { value: _vm.category_name },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(
-                          _vm.categories,
-                          "category_name",
-                          $event.target.value
-                        )
+                        _vm.category_name = $event.target.value
                       }
                     }
                   })
@@ -47638,7 +47731,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.categories, function(category) {
+                _vm._l(_vm.allCategories, function(category) {
                   return _c("tr", { key: category.id }, [
                     _c("td", [_vm._v(_vm._s(category.category_name))]),
                     _vm._v(" "),

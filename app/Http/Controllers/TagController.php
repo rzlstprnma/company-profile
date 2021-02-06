@@ -26,8 +26,8 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        $blog_tags = BlogTag::create($request->all());
-        return response()->json($blog_tags);
+        $blog_tag = BlogTag::create($request->all());
+        return response()->json($blog_tag);
     }
 
     /**
@@ -38,6 +38,7 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $blog_tag = BlogTag::destroy($id);
+        return response()->json($blog_tag);
     }
 }
