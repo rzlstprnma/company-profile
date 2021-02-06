@@ -11,7 +11,7 @@
                     <form @submit.prevent="createTag" method="post">
                         <div class="form-group">
                             <label for="tag_name">Tag Name</label>
-                            <input type="text" id="tag_name" v-model="tags.tag_name" class="form-control-sm form-control">
+                            <input type="text" id="tag_name" v-model="tag_name" class="form-control-sm form-control">
                         </div>
                         <button class="btn btn-sm btn-block btn-primary">Create Tag</button>
                     </form>
@@ -23,7 +23,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="tag in tags" :key="tag.id">
+                            <tr v-for="tag in allTags" :key="tag.id">
                                 <td>{{ tag.tag_name }}</td>
                                 <td>
                                     <a href="#" @click.prevent="deleteTag(tag.id)" class="btn btn-sm btn-danger">Delete</a>
@@ -38,41 +38,23 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
     data() {
         return {
-            tags: [],            
+            tag_name: "",            
         }
     },
     methods: {
-        getTag(){
-            axios
-                .get('/api/admin/tags')
-                .then(res => {
-                    this.tags = res.data
-                })
-        },
+        ...mapActions(['fetchTags', 'addTag', 'deleteTag']),
         createTag(){
-            axios
-                .post('/api/admin/tags', {
-                    tag_name: this.tags.tag_name
-                })
-                .then(res => {
-                    this.tags = [...this.tags, res.data]
-                })
-        },
-        deleteTag(id){
-            axios
-                .post('/api/admin/tags/'+id, {
-                    _method : 'DELETE'
-                })
-                .then(res => {              
-                    this.tags = this.tags.filter(tag => tag.id != id)
-                })
+            this.addTag(this.tag_name)
         }
     },
-    mounted() {
-        this.getTag()
+    computed: mapGetters(['allTags']),
+    created() {
+        this.fetchTags()
     }
 }
 </script>
