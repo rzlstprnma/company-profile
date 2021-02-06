@@ -53,7 +53,12 @@ class PostController extends Controller
         $blog_tag_id = explode(",", $request->blog_tag_id);
         $post->blog_tags()->sync($blog_tag_id);
         
-        return response()->json($post);
+        $response = [
+            "success" => true,
+            "post" => $post,
+        ];
+
+        return response()->json($response);
     }
 
     /**

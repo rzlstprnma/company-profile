@@ -16,13 +16,13 @@
                             <label for="categoy">Choose Category</label>
                             <select v-model="form.category_id" id="category" class="custom-select">
                                 <option disabled selected value="">-- Choose Category --</option>
-                                <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.category_name }}</option>
+                                <option v-for="category in allCategories" :key="category.id" :value="category.id">{{ category.category_name }}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="tags">Tags</label>
                             <Select2Multiple id="tags" name="blog_tag_id[]" v-model="form.blog_tag_id">
-                                <option v-for="option in options" :key="option.id" :value="option.id">{{ option.tag_name }}</option>
+                                <option v-for="option in allTags" :key="option.id" :value="option.id">{{ option.tag_name }}</option>
                             </Select2Multiple>
                         </div>
                         <div class="form-group">
@@ -67,43 +67,30 @@
 <script>
 import Select2Multiple from '../Select2Multiple'
 import Editor from '@tinymce/tinymce-vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data() {
         return {
-            categories: [],
             form: {
                 title: "",
                 photo: "",
                 body: "",
                 category_id: "",
                 blog_tag_id: []
-            },
-            options: []
+            }
         }
     },
+    computed: mapGetters(['allTags', 'allCategories']),
     components: {
         Editor,
         Select2Multiple,
         editor: Editor,
     },
     methods: {
+        ...mapActions(['fetchTags', 'fetchCategories', 'addPost']),
         onImageChange(e){
             this.form.photo = e.target.files[0];
-        },
-        getTags(){
-            axios
-                .get('/api/admin/tags')
-                .then(res => {
-                    this.options = res.data
-                })
-        },
-        getCategories(){
-            axios
-                .get('/api/admin/categories')
-                .then(res => {
-                    this.categories = res.data
-                })
         },
         storePost(){
             let formData = new FormData();
@@ -112,23 +99,14 @@ export default {
             formData.append('category_id', this.form.category_id)
             formData.append('body', this.form.body)
             formData.append('blog_tag_id', this.form.blog_tag_id)
-            axios({
-                method: 'post',
-                url: '/api/admin/posts',
-                data: formData,
-                headers: {'Content-Type': `multipart/form-data; boundary=${formData._boundary}` }
-            })
-            .then(function (res) {
-                this.$router.push({ name: 'Home' })
-            })
-            .catch(function (res) {
-                console.log(res);
-            });
+            formData.append('self', this)
+            
+            this.$store.dispatch('addPost', formData).then(() => this.$router.push({ name: "Home" }))
         }
     },
-    created(){
-        this.getTags(),
-        this.getCategories()
+    created() {
+        this.fetchCategories(),
+        this.fetchTags()
     }
 }
 </script>
