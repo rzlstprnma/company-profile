@@ -2438,6 +2438,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2445,10 +2448,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       category_name: ""
     };
   },
-  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['allCategories']),
+  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['allCategories', 'allCategoryErrors']),
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['fetchCategories', 'addCategory', 'deleteCategory'])), {}, {
     createCategory: function createCategory() {
-      this.addCategory(this.category_name);
+      this.$store.dispatch('addCategory', this.category_name);
     }
   }),
   created: function created() {
@@ -2776,6 +2779,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2788,7 +2792,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.addTag(this.tag_name);
     }
   }),
-  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['allTags']),
+  computed: (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapGetters)(['allTags', 'allTagErrors']),
   created: function created() {
     this.fetchTags();
   }
@@ -3333,11 +3337,15 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var state = {
-  categories: []
+  categories: [],
+  validation: []
 };
 var getters = {
   allCategories: function allCategories(state) {
     return state.categories;
+  },
+  allCategoryErrors: function allCategoryErrors(state) {
+    return state.validation;
   }
 };
 var actions = {
@@ -3379,7 +3387,12 @@ var actions = {
 
             case 3:
               response = _context2.sent;
-              commit('newCategory', response.data);
+
+              if (response.data.errors == "") {
+                commit('newCategory', response.data);
+              } else {
+                state.validation = response.data.errors;
+              }
 
             case 5:
             case "end":
@@ -3608,11 +3621,15 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var state = {
-  tags: []
+  tags: [],
+  validation: []
 };
 var getters = {
   allTags: function allTags(state) {
     return state.tags;
+  },
+  allTagErrors: function allTagErrors(state) {
+    return state.validation;
   }
 };
 var actions = {
@@ -3654,7 +3671,12 @@ var actions = {
 
             case 3:
               response = _context2.sent;
-              commit('newTag', response.data);
+
+              if (response.data.errors == "") {
+                commit('newTag', response.data);
+              } else {
+                state.validation = response.data.errors;
+              }
 
             case 5:
             case "end":
@@ -47818,7 +47840,17 @@ var render = function() {
                         _vm.category_name = $event.target.value
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.allCategoryErrors.length != 0
+                    ? _c("span", { staticClass: "alert-danger" }, [
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(_vm.allCategoryErrors.category_name[0]) +
+                            "\n                        "
+                        )
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c(
@@ -48438,7 +48470,13 @@ var render = function() {
                         _vm.tag_name = $event.target.value
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.allTagErrors.length != 0
+                    ? _c("span", { staticClass: "alert-danger" }, [
+                        _vm._v(_vm._s(_vm.allTagErrors.tag_name[0]))
+                      ])
+                    : _vm._e()
                 ]),
                 _vm._v(" "),
                 _c(

@@ -12,6 +12,9 @@
                         <div class="form-group">
                             <label for="category_name">Category Name</label>
                             <input type="text" v-model="category_name" class="form-control-sm form-control">
+                            <span v-if="allCategoryErrors.length != 0" class="alert-danger">
+                                {{ allCategoryErrors.category_name[0] }}
+                            </span>
                         </div>
                         <button class="btn btn-sm btn-block btn-primary">Create Category</button>
                     </form>
@@ -43,14 +46,14 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
     data() {
         return {
-            category_name: "",            
+            category_name: "",          
         }
     },
-    computed: mapGetters(['allCategories']),
+    computed: mapGetters(['allCategories', 'allCategoryErrors']),
     methods: {
         ...mapActions(['fetchCategories', 'addCategory', 'deleteCategory']),
         createCategory(){
-            this.addCategory(this.category_name)
+            this.$store.dispatch('addCategory', this.category_name)
         }
     },
     created() {

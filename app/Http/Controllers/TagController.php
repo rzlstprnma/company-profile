@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogTag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
@@ -26,6 +27,14 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'tag_name' => 'required'
+        ]);
+        
+        if($validator->fails()){
+            return response()->json(["errors" => $validator->errors()]);
+        }
+
         $blog_tag = BlogTag::create($request->all());
         return response()->json($blog_tag);
     }

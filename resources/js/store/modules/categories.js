@@ -1,9 +1,11 @@
 const state = {
-    categories : []
+    categories : [],
+    validation: []
 }
 
 const getters = {
-    allCategories: (state) => state.categories
+    allCategories: (state) => state.categories,
+    allCategoryErrors: (state) => state.validation
 }
 
 const actions = {
@@ -13,7 +15,11 @@ const actions = {
     },
     async addCategory({ commit }, category_name) {
         const response = await axios.post('/api/admin/categories', { category_name })
-        commit('newCategory', response.data)
+        if(response.data.errors == "") {
+            commit('newCategory', response.data)
+        }else{
+            state.validation = response.data.errors
+        }
     },
     async deleteCategory({ commit }, id) {
         await axios.post(`/api/admin/categories/${id}`, { _method: 'DELETE' })

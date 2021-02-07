@@ -12,6 +12,7 @@
                         <div class="form-group">
                             <label for="tag_name">Tag Name</label>
                             <input type="text" id="tag_name" v-model="tag_name" class="form-control-sm form-control">
+                            <span v-if="allTagErrors.length != 0" class="alert-danger">{{ allTagErrors.tag_name[0] }}</span>
                         </div>
                         <button class="btn btn-sm btn-block btn-primary">Create Tag</button>
                     </form>
@@ -52,7 +53,7 @@ export default {
             this.addTag(this.tag_name)
         }
     },
-    computed: mapGetters(['allTags']),
+    computed: mapGetters(['allTags', 'allTagErrors']),
     created() {
         this.fetchTags()
     }
