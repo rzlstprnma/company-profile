@@ -13,10 +13,10 @@
             <div class="mt-1">
                 <div class="float-left post-action">
                     <router-link class="btn btn-sm btn-info text-dark" to=""><i class="fa fa-eye"></i></router-link>
-                    <router-link class="ml-2 btn btn-sm btn-warning text-dark" to=""><i class="fa fa-pencil"></i></router-link>
+                    <a class="ml-2 btn btn-sm btn-warning text-dark" @click="editPost(post)"><i class="fa fa-pencil"></i></a>
                     <a class="ml-2 btn btn-sm btn-danger text-dark" @click.prevent="deletePost(post.id)"><div class="fa fa-trash"></div></a>
                 </div>
-                <div class="float-right post-category"><span class="badge badge-success" v-if="post.category.category_name">{{ post.category.category_name }}</span></div>
+                <div class="float-right post-category"><span class="badge badge-success" v-if="post.category">{{ post.category.category_name }}</span></div>
             </div>
         </div>
     </div>
@@ -27,7 +27,23 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
     computed: mapGetters(['allPosts']),
     methods: {
-        ...mapActions(['fetchPosts', 'deletePost']),
+        ...mapActions(['fetchPosts', 'deletePost', 'postDetail']),
+        editPost(post) {
+            const updPost = {
+                id: post.id,
+                title: post.title,
+                photo: post.photo,
+                category_id: post.category_id,
+                blog_tag_id: post.blog_tags,
+                body: post.body,
+            }
+            // console.log(updPost)
+            this.$store.commit('setPosts', {
+                name: 'postDetail',
+                updPost
+            })
+            this.$router.push({ name: "PostEdit", params: { id: post.id } })
+        }
     },
     created(){
         this.fetchPosts()

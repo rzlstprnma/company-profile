@@ -1,9 +1,11 @@
 const state = {
-    posts : []
+    posts : [],
+    validation: [],
 }
 
 const getters = {
-    allPosts: (state) => state.posts
+    allPosts: (state) => state.posts,
+    allPostErrors: (state) => state.validation
 }
 
 const actions = {
@@ -12,19 +14,29 @@ const actions = {
         commit('setPosts', response.data)
     },
     async addPost({ commit }, formData) {
-        const response = 
-        await axios({
-            url: '/api/admin/posts',
-            data: formData,
-            method: 'post',
-            headers: {'Content-Type': `multipart/form-data; boundary=${formData._boundary}` }
-        })
-
-        commit('newPost', response.data)
+        try {
+            const response = 
+            await axios({
+                url: '/api/admin/posts',
+                data: formData,
+                method: 'post',
+                headers: {'Content-Type': `multipart/form-data; boundary=${formData._boundary}` }
+            })
+            if(response.status == 200) {
+                commit('newPost', response.data)
+            }
+        }catch(errors) {
+            state.validation = errors.response.data.errors
+        }
+        
     },
     async deletePost({ commit }, id) {
         await axios.post(`/api/admin/posts/${id}`, { _method: 'DELETE' })
         commit('removePost', id)
+    },
+    async postDetail(updPost) {
+        await axios.get(`/api/admin/posts/${updPost.id}/edit`, updPost)   
+        console.log(updPost)
     }
 }
 const mutations = {

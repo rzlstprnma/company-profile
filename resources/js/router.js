@@ -30,6 +30,11 @@ const routes = [
         component: PostCreate
     },
     {
+        path: "/admin/posts/edit/:id",
+        name: "PostEdit",
+        component: PostCreate
+    },
+    {
         path: "*",
         component: NotFound
     }
